@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#241044">
+<title>O Caminho da Consciência Negra</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;
+ font-family:Arial,sans-serif;
+ color:white;text-align:center;
+ background:linear-gradient(140deg,#170b2e,#542078,#b45b21);
+ padding:20px;
+}
+main{max-width:500px;margin:auto}
+h1{color:#ffd36b}
+.card{
+ background:#291643;padding:25px;
+ border:2px solid #e6a849;border-radius:22px;
+ box-shadow:0 12px 30px #10051c;
+ transform:perspective(700px) rotateX(2deg);
+}
+button{
+ background:#f4b942;color:#241044;
+ border:0;border-radius:12px;padding:14px;
+ margin:7px;width:100%;font-weight:bold;
+ font-size:16px;cursor:pointer;
+}
+button:hover{background:#ffe09a}
+#answers button{background:#eee;color:#241044}
+#message{min-height:28px;font-weight:bold}
+</style>
+</head>
+<body>
+<main>
+<h1>✊🏿 O Caminho da Consciência Negra</h1>
+<p>Aprenda, descubra e avance!</p>
+<div class="card">
+<h2 id="phase">Fase 1 de 100</h2>
+<p id="progress">Progresso: 0%</p>
+<h3 id="question">Prepare-se para começar!</h3>
+<div id="answers"></div>
+<p id="message"></p>
+<button id="start" onclick="startGame()">COMEÇAR JOGO</button>
+<button id="next" onclick="nextPhase()" hidden>PRÓXIMA FASE</button>
+</div>
+<p>🏆 Conhecimento é nossa conquista!</p>
+</main>
+<script>
+const questions=[
+["Em que dia é celebrado o Dia da Consciência Negra? ",
+["20 de novembro","7 de setembro","15 de novembro"],0],
+["Quem foi Zumbi dos Palmares?",
+["Um pintor","Uma liderança quilombola","Um navegador"],1],
+["O que foi o Quilombo dos Palmares?",
+["Uma comunidade de resistência","Uma escola","Um castelo"],0],
+["Quem foi Dandara dos Palmares?",
+["Uma escritora portuguesa","Uma rainha europeia","Uma liderança de resistência"],2],
+["Qual é a importância da cultura afro-brasileira?",
+["Não tem importância","Faz parte da formação do Brasil","É apenas uma dança"],1],
+["O que é racismo?",
+["Discriminação por raça ou origem étnica","Uma festa popular","Uma tradição musical"],0],
+["Qual instrumento tem origem africana?",
+["Violino","Atabaque","Piano"],1],
+["O que significa igualdade racial?",
+["Privilégios para alguns","Separação das pessoas","Direitos e oportunidades iguais"],2],
+["Quem foi Machado de Assis?",
+["Escritor brasileiro","Jogador de futebol","Explorador"],0],
+["O que devemos fazer contra o racismo?",
+["Ignorar sempre","Respeitar e combater a discriminação","Apoiar preconceitos"],1]
+];
+let level=1;
+let completed=Number(localStorage.getItem("faseNegra")||0);
+function update(){
+ document.getElementById("phase").textContent="Fase "+level+" de 100";
+ document.getElementById("progress").textContent=
+ "Progresso: "+completed+"%";
+}
+function startGame(){
+ document.getElementById("start").hidden=true;
+ showQuestion();
+}
+function showQuestion(){
+ update();
+ let q=questions[(level-1)%questions.length];
+ document.getElementById("question").textContent=q[0];
+ document.getElementById("message").textContent="";
+ document.getElementById("next").hidden=true;
+ let area=document.getElementById("answers");
+ area.innerHTML="";
+ q[1].forEach((answer,i)=>{
+ let b=document.createElement("button");
+ b.textContent=answer;
+ b.onclick=()=>check(i,q[2]);
+ area.appendChild(b);
+ });
+}
+function check(choice,correct){
+ let area=document.getElementById("answers");
+ if(choice===correct){
+ document.getElementById("message").textContent="🎉 Muito bem! Resposta correta!";
+ if(level>completed){
+ completed=level;
+ localStorage.setItem("faseNegra",completed);
+ }
+ area.querySelectorAll("button").forEach(b=>b.disabled=true);
+ document.getElementById("next").hidden=false;
+ update();
+ }else{
+ document.getElementById("message").textContent="Tente novamente!";
+ }
+}
+function nextPhase(){
+ if(level<100){
+ level++;
+ showQuestion();
+ }else{
+ document.getElementById("question").textContent=
+ "🏆 Parabéns! Você concluiu as 100 fases!";
+ document.getElementById("answers").innerHTML="";
+ document.getElementById("next").hidden=true;
+ document.getElementById("message").textContent=
+ "Você completou O Caminho da Consciência Negra!";
+ }
+}
+</script>
+</body>
+</html>
